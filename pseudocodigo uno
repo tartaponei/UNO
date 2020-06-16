@@ -1,0 +1,32 @@
+1- embaralha as cartas -OK!!
+
+2- pergunta numero de cartas pra cada jogador (n) -OK!!
+
+3- distribui n cartas pro jogador -OK!!
+
+4- distribui n cartas pro bot -OK!!
+
+5- as cartas que sobraram ficam no descarte -OK!!
+
+6- carta da mesa é escolhida
+	6.1- executar "MESA"
+	6.2- carta da mesa é excluída do baralho
+
+7- 
+
+
+
+MESA:
+1- embaralhar as cartas (opcional, ja vao estar embaralhadas)
+
+2- pegar uma carta da pilha de descarte
+
+3- se a carta não for especial (números):
+	3.1- essa carta é a escolhida
+	3.2 - ir pro passo 5
+
+4- se a carta for especial (+4, +2, coringa):
+	4.1- essa carta não é escolhida
+	4.2 - ir pro passo 2
+
+5- termina função
