@@ -20,17 +20,18 @@ def escolhe_carta_mesa(descarte):
 
 #=======
 
-def escolha_carta_bot(cartas_bot, carta_mesa):
+def escolha_carta_bot(cartas_bot, carta_mesa, descarte):
     carta_mesa = carta_mesa.split() #separo tipo e cor da carta da mesa
     
     i = 0 #inicializador pra teste
     j = 0 #indice de contador
     
-    while(i == 0): #enquanto inicializador for 0 (carta não for escolhida)
+    while(i == 0 and j < len(cartas_bot)): #enquanto inicializador for 0 (carta não for escolhida) e ainda tiver carta pra analisar
         carta_atual = cartas_bot[j].split() #separa tipo e cor da carta atual
 
         if(carta_atual[0] == carta_mesa[0] or carta_atual[1] == carta_mesa[1]): #se tipo ou cor da carta atual for igual ao/à da mesa 
             return cartas_bot[j] #retorna carta atual
+            carta_jogada_bot(cartas_bot[j]) #carta é excluída da mão
             i = 1 #inicializador fica 1 (carta foi escolhida)
 
         else: #senão
@@ -42,7 +43,58 @@ def escolha_carta_bot(cartas_bot, carta_mesa):
                 return cartas_bot[j] #retorna carta atual
             i = 1 #inicializador fica 1 (carta foi escolhida)"""
 
+        if(i == 0): #se nenhuma carta foi escolhida (nenhuma é possível)
+            carta_comprada = compra_carta(carta_mesa, descarte) #compra carta
+
+            if(carta_comprada[0] == carta_mesa[0] or carta_comprada[1] == carta_mesa[1]): #se a carta comprada for jogavel
+                return carta_comprada #retorna a carta (escolhida)
+                carta_comprada_jogada(carta_comprada, descarte) #executa a função de excluir ela do descarte
+            else:
+                carta_comprada_nao_jogada_bot(carta_comprada) #executa a função de add ela na mão
+        
+
 #=======
+
+def carta_jogada_bot(carta):
+    global cartas_bot #mao do bot declarada fora da função 
+    i, j = 0
+    
+    while(i == 0):
+        if(carta == cartas_bot[j]): #se a carta for a mesma analisada na mão
+            del(cartas_bot[j]) #a carta é excluída
+            i = 1
+        else:
+            j = j + 1
+
+#=======
+
+def compra_carta(carta_mesa, descarte):
+    carta_comprada = descarte[0] #compra primeira carta do descarte
+    return carta_comprada #retorna essa carta
+
+#=======
+
+def carta_comprada_jogada(carta):
+    global descarte #descarte declarada fora da função 
+    i, j = 0
+    
+    while(i == 0):
+        if(carta == descarte[j]): #se a carta comprada for a mesma analisada no descarte
+            del(descarte[j]) #a carta é excluída
+            i = 1
+            
+#=======
+
+def carta_comprada_nao_jogada_bot(carta):
+    global cartas_bot
+
+    cartas_bot.append(carta) #add carta comprada à mão do bot
+
+
+def carta_comprada_nao_jogada_jog(carta):
+    global cartas_jog
+
+    cartas_bot.append(carta) #add carta comprada à mão do bot
 
 
 #VARIAVEIS INICIAIS
@@ -87,12 +139,14 @@ print("DESCARTE: ", descarte)
 
 #BOT COMEÇA
 #while(cartas_jog > 0 and cartas_bot > 0): #enquanto os dois ainda tiverem cartas na mão
-escolha = escolha_carta_bot(cartas_bot, carta_mesa)
+escolha = escolha_carta_bot(cartas_bot, carta_mesa, descarte)
 
 print("CARTA ESCOLHIDA PELO BOT: ", escolha)
+print("BOT: ", cartas_bot)
+print("DESCARTE: ", descarte)
 
-
-
+carta_mesa = escolha
+print("CARTA DA MESA: ", carta_mesa)
 
 
 
