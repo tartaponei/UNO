@@ -9,24 +9,57 @@
 5- as cartas que sobraram ficam no descarte -OK!!
 
 6- carta da mesa é escolhida
-	6.1- executar "MESA"
-	6.2- carta da mesa é excluída do baralho
+	6.1- executar "MESA" -OK!!
+	6.2- carta da mesa é excluída do baralho -OK!!
 
-7- 
+7- jogador escolhe a carta que vai jogar
+	7.1- executar "VEZ JOGADOR" - OK!!
 
+...
 
+10- bot escolhe a carta
 
-MESA:
+========================
+
+MESA: -OK!!-OK!!-OK!!
 1- embaralhar as cartas (opcional, ja vao estar embaralhadas)
 
-2- pegar uma carta da pilha de descarte
+2- pegar uma carta da pilha de descarte -OK!!
 
 3- se a carta não for especial (números):
-	3.1- essa carta é a escolhida
-	3.2 - ir pro passo 5
+	3.1- essa carta é a escolhida -OK!
+	3.2 - ir pro passo 5 -OK!
 
 4- se a carta for especial (+4, +2, coringa):
-	4.1- essa carta não é escolhida
-	4.2 - ir pro passo 2
+	4.1- essa carta não é escolhida -OK!!
+	4.2 - ir pro passo 2 -OK!!
 
-5- termina função
+5- termina função -OK!!
+
+================
+
+ESCOLHA CARTA: 
+1- caso a carta seja certa:
+	1.1- retorna True -OK!!
+	1.2- ir pro passo 3 -OK!!
+
+2- caso a carta não seja certa:
+	2.1- retorna False
+	2.2- ir pro passo 3
+
+3- termina função
+
+===========
+
+VEZ JOGADOR:
+1- jogador escolhe a carta que vai jogar
+	1.1- executar "ESCOLHA CARTA" -OK!!
+
+2- caso "ESCOLHA CARTA" retorne True:
+	2.1- a carta escolhida vira a carta da mesa
+	2.1- a carta escolhida é excluída da mão do jogador
+	2.2- ir pro passo 4
+
+3- caso "ESCOLHA CARTA" retorne False:
+	3.1- mensagem de aviso aparece pedindo pra escolher de novo
+	3.2- ir pro passo 1
