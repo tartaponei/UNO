@@ -37,7 +37,7 @@ MESA: -OK!!-OK!!-OK!!
 
 ================
 
-ESCOLHA CARTA: 
+ESCOLHA CARTA: -OK!!-OK!!-OK!!
 1- caso a carta seja certa:
 	1.1- retorna True -OK!!
 	1.2- ir pro passo 3 -OK!!
@@ -50,7 +50,7 @@ ESCOLHA CARTA:
 
 ===========
 
-VEZ JOGADOR:
+VEZ JOGADOR: -OK!!-OK!!-OK!!
 1- jogador escolhe a carta que vai jogar
 	1.1- executar "ESCOLHA CARTA" -OK!!
 
@@ -67,7 +67,7 @@ VEZ JOGADOR:
 
 ===========
 
-VEZ BOT:
+VEZ BOT: -OK!!-OK!!-OK!!
 1- pra cada carta da mão do bot:
 	1.1- executar "ESCOLHA CARTA" -OK!!
 	1.2- caso "ESCOLHA CARTA" retorne True:

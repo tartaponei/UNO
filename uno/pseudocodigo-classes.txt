@@ -1,0 +1,23 @@
+CLASSE JOGADOR (PAI):
+    ATRIBUTOS:
+    - cartas da mão
+    - número de cartas
+
+    FUNÇÕES:
+    - escolher cartas
+    - escolher cor (derivado de escolher cartas)
+    - comprar carta
+    - verificar se a carta é válida
+
+CLASSE BOT (FILHO):
+    ATRIBUTOS: herdados do PAI
+
+    FUNÇÕES: herdados do PAI com modificações
+
+CLASSE MESA:
+    ATRIBUTOS:
+    - carta
+    - descarte
+
+    FUNÇÕES:
+    - escolher carta inicial da mesa
