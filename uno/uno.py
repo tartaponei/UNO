@@ -5,7 +5,10 @@ import random
 #VARIAVEIS INICIAIS
 #-------------------
 #"+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa", 
-BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", "1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",]
+BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", 
+"1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",
+"1 azul", "2 azul", "3 azul", "4 azul", "5 azul", "6 azul", "7 azul", "8 azul", "9 azul",
+"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde"]
 
 #CLASSES
 #-----------
@@ -34,16 +37,18 @@ class Jogador(): #pai de bot
 
     def vez(self, carta_mesa, descarte):
         carta = "errada" #carta inicialmente sendo errada
+        e = "ab" #iniciada assim pra entrar no if a primeira vez
 
         print("\nSUA VEZ DE JOGAR, escolha sua carta de acordo com o índice (começando do 0):")
         print("SEU BARALHO: ", self.cartas)
         print("SE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
-        e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
+
+        while len(e) > 1 and e != "comprar": #se algo inválido for digitado
+            e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
 
         print("\n====================================================")
 
         if e == "comprar": #se o jogado escolher comprar
-            
             return self.comprar_carta(descarte, carta_mesa) #executar função de comprar carta
 
         else:
@@ -94,6 +99,7 @@ class Jogador(): #pai de bot
         else:
             print("\nCARTA COMPRADA NÃO PODE SER JOGADA\nPORQUE A CARTA DA MESA É {}\nA CARTA COMPRADA FOI ADD AO SEU BARALHO" .format(carta_mesa))
             self.cartas.append(carta_comprada) #carta comprada é adicionada ao baralho do jogador
+            mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
 
@@ -105,7 +111,7 @@ class Bot(Jogador):
         self.comprar_carta
 
     def vez(self, carta_mesa, descarte):
-        print("\nVEZ DA CPU")
+        print("\n====================================================\n\nVEZ DA CPU")
         print(self.cartas)
         
         carta_foi_escolhida = False
@@ -114,7 +120,7 @@ class Bot(Jogador):
             #print(carta_certa)
             if carta_certa == True: #se a carta for possível de ser jogada
                 carta_escolhida = self.cartas[i]
-                print("O CPU ESCOLHEU", carta_escolhida)
+                print("O BOT ESCOLHEU", carta_escolhida)
                 carta_foi_escolhida = True
 
                 for i in range(len(self.cartas)):
@@ -124,8 +130,8 @@ class Bot(Jogador):
 
                 return carta_escolhida #retorna a carta escolhida
 
-        if carta_foi_escolhida == False:
-            return self.comprar_carta(descarte, carta_mesa)
+        if carta_foi_escolhida == False: #se nenhuma carta tiver sido escolhida
+            return self.comprar_carta(descarte, carta_mesa) #executar compra de carta
 
     def comprar_carta(self, descarte, carta_mesa):
         carta_comprada = descarte[0] #pega a primeira carta do descarte
@@ -141,6 +147,7 @@ class Bot(Jogador):
         else:
             print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU")
             self.cartas.append(carta_comprada)
+            mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
 #MAIN
@@ -178,12 +185,16 @@ quem_joga = random.randint(0, 1)
 
 #---CONTINUAÇÃO DO JOGO---
 while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois bater
-    if(quem_joga == 0): #se quem jogou antes foi o jogador
+    if quem_joga == 0: #se quem jogou antes foi o jogador
         #---VEZ DO BOT---
         mesa.carta = bot.vez(mesa.carta, mesa.descarte)
 
         print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
         print("\nNOVA CARTA DA MESA:", mesa.carta)
+
+        if len(bot.cartas) == 1: #caso tenha uma carta
+            print("\nBOT DISSE UNO!!")
+
         quem_joga = 1 #próximo a jogar é o jogador
 
     else:
@@ -193,4 +204,15 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         print("\nSEU BARALHO ATUALIZADO:", jog.cartas)
         print("\nNOVA CARTA DA MESA:", mesa.carta)
 
+        if len(jog.cartas) == 1: #caso tenha uma carta
+            print("\nVOCÊ DISSE UNO!!")
+
         quem_joga = 0 #próximo a jogar é o bot
+
+if len(jog.cartas) == 0:
+    vencedor = "VOCÊ"
+else:
+    vencedor = "BOT"
+
+print("\n====================================================\n{} VENCEU, PARABÉNS!!" .format(vencedor))
+print("\n----->FIM DO JOGO!! :)<-----")
