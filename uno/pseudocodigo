@@ -13,11 +13,10 @@
 	6.2- carta da mesa é excluída do baralho -OK!!
 
 7- jogador escolhe a carta que vai jogar
-	7.1- executar "VEZ JOGADOR" - OK!!
+	7.1- executar "VEZ JOGADOR" -OK!!
 
-...
-
-10- bot escolhe a carta
+8- bot escolhe a carta
+	8.1- executar "VEZ BOT" -OK!!
 
 ========================
 
@@ -44,10 +43,10 @@ ESCOLHA CARTA:
 	1.2- ir pro passo 3 -OK!!
 
 2- caso a carta não seja certa:
-	2.1- retorna False
-	2.2- ir pro passo 3
+	2.1- retorna False -OK!!
+	2.2- ir pro passo 3 -OK!!
 
-3- termina função
+3- termina função -OK!!
 
 ===========
 
@@ -56,10 +55,26 @@ VEZ JOGADOR:
 	1.1- executar "ESCOLHA CARTA" -OK!!
 
 2- caso "ESCOLHA CARTA" retorne True:
-	2.1- a carta escolhida vira a carta da mesa
-	2.1- a carta escolhida é excluída da mão do jogador
-	2.2- ir pro passo 4
+	2.1- a carta escolhida vira a carta da mesa -OK!!
+	2.1- a carta escolhida é excluída da mão do jogador -OK!!
+	2.2- ir pro passo 4 -OK!!
 
 3- caso "ESCOLHA CARTA" retorne False:
-	3.1- mensagem de aviso aparece pedindo pra escolher de novo
-	3.2- ir pro passo 1
+	3.1- mensagem de aviso aparece pedindo pra escolher de novo -OK!!
+	3.2- ir pro passo 1 -OK!!
+
+4- termina função -OK!!
+
+===========
+
+VEZ BOT:
+1- pra cada carta da mão do bot:
+	1.1- executar "ESCOLHA CARTA" -OK!!
+	1.2- caso "ESCOLHA CARTA" retorne True:
+		1.2.1- a carta atual vira a carta da mesa -OK!!
+		1.2.2- a carta atual é excluída da mão do bot -OK!!
+		1.2.3- ir para o passo 2 -OK!!
+	1.3- caso "ESCOLHA CARTA" retorne False:
+		1.3.1- ir para próxima carta e ir para o passo 1.1 -OK!!
+
+2- termina função -OK!!
