@@ -4,7 +4,8 @@ import random
 
 #VARIAVEIS INICIAIS
 #-------------------
-BARALHO = ["+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa", "1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", "1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",]
+#"+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa", 
+BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", "1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",]
 
 #CLASSES
 #-----------
@@ -23,11 +24,13 @@ class Mesa():
                     i = 1
                     return self.descarte[p] #retorna a carta atual
 
+    def excluir_carta_descarte(self, carta):
+        if self.descarte[0] == carta: #se a carta atual for a mesma que tem que excluir
+            self.descarte.pop(0) #carta excluída do baralho
 
-class Jogador(): #pai de  bot
+class Jogador(): #pai de bot
     def __init__(self, cartas):
         self.cartas = cartas
-        self.numero_cartas = len(cartas)
 
     def vez(self, carta_mesa, descarte):
         carta = "errada" #carta inicialmente sendo errada
@@ -36,6 +39,8 @@ class Jogador(): #pai de  bot
         print("SEU BARALHO: ", self.cartas)
         print("SE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
         e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
+
+        print("\n====================================================")
 
         if e == "comprar": #se o jogado escolher comprar
             
@@ -58,9 +63,10 @@ class Jogador(): #pai de  bot
                     carta_escolhida = self.cartas[escolha]
                     print("\nVOCÊ ESCOLHEU", carta_escolhida)
 
-                    for i in range(len(self.cartas)-1):
+                    for i in range(len(self.cartas)):
                         if self.cartas[i] == carta_escolhida: #se a carta atual for a mesma que ele escolheu
                             self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
+                            break
 
                     return carta_escolhida #retorna a carta que ele escolheu
 
@@ -76,13 +82,14 @@ class Jogador(): #pai de  bot
 
     def comprar_carta(self, descarte, carta_mesa):
         carta_comprada = descarte[0] #pega a primeira carta do descarte
-
         print("\nCARTA COMPRADA: ", carta_comprada)
+
         carta_comprada_s = carta_comprada.split() #separa em numero/cor
         carta_mesa_s = carta_mesa.split() #separa em numero/cor
 
         if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1]: #se for jogável
             print("CARTA COMPRADA FOI JOGADA")
+            mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_comprada #retorna a carta comprada
         else:
             print("\nCARTA COMPRADA NÃO PODE SER JOGADA\nPORQUE A CARTA DA MESA É {}\nA CARTA COMPRADA FOI ADD AO SEU BARALHO" .format(carta_mesa))
@@ -104,15 +111,16 @@ class Bot(Jogador):
         carta_foi_escolhida = False
         for i in range(len(self.cartas)): #corre o baralho do bot (primeira carta possível será a escolhida)
             carta_certa = self.carta_possivel(self.cartas, i, carta_mesa) #executa a função pra ver se a carta é certa
-            print(carta_certa)
+            #print(carta_certa)
             if carta_certa == True: #se a carta for possível de ser jogada
                 carta_escolhida = self.cartas[i]
                 print("O CPU ESCOLHEU", carta_escolhida)
                 carta_foi_escolhida = True
 
-                for i in range(len(self.cartas)-1):
+                for i in range(len(self.cartas)):
                     if self.cartas[i] == carta_escolhida: #se a carta atual for a mesma que ele escolheu
-                        self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog 
+                        self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
+                        break
 
                 return carta_escolhida #retorna a carta escolhida
 
@@ -123,8 +131,12 @@ class Bot(Jogador):
         carta_comprada = descarte[0] #pega a primeira carta do descarte
         print("\nCARTA COMPRADA PELO BOT: ", carta_comprada)
 
-        if carta_comprada[0] == carta_mesa[0] or carta_comprada[1] == carta_mesa[1]: #se for jogável
+        carta_comprada_s = carta_comprada.split() #separa em numero/cor
+        carta_mesa_s = carta_mesa.split() #separa em numero/cor
+
+        if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1]: #se for jogável
             print("BOT JOGOU A CARTA")
+            mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_comprada #retorna a carta comprada
         else:
             print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU")
@@ -145,7 +157,6 @@ descarte = BARALHO[n*2:-1] #restante das cartas pro descarte
 
 print("\nJOGADOR:", jog.cartas)
 print("BOT:", bot.cartas)
-#print("DESCARTE:", descarte)
 
 #---ESCOLHE A CARTA DA MESA---
 mesa = Mesa(descarte)
@@ -162,14 +173,24 @@ while i == 0: #enquanto o inicializador for0
 
 print("DESCARTE:", mesa.descarte)
 
-#---VEZ DO JOGADOR---
-mesa.carta = jog.vez(mesa.carta, mesa.descarte) #carta da mesa vira a que foi escolhida pelo jog
+#---PRIMEIRA RODADA---
+quem_joga = random.randint(0, 1)
 
-print("\nSEU BARALHO ATUALIZADO:", jog.cartas)
-print("\nNOVA CARTA DA MESA:", mesa.carta)
+#---CONTINUAÇÃO DO JOGO---
+while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois bater
+    if(quem_joga == 0): #se quem jogou antes foi o jogador
+        #---VEZ DO BOT---
+        mesa.carta = bot.vez(mesa.carta, mesa.descarte)
 
-#---VEZ DO BOT---
-mesa.carta = bot.vez(mesa.carta, mesa.descarte)
+        print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
+        print("\nNOVA CARTA DA MESA:", mesa.carta)
+        quem_joga = 1 #próximo a jogar é o jogador
 
-print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
-print("\nNOVA CARTA DA MESA:", mesa.carta)
+    else:
+        #---VEZ DO JOGADOR---
+        mesa.carta = jog.vez(mesa.carta, mesa.descarte) #carta da mesa vira a que foi escolhida pelo jog
+
+        print("\nSEU BARALHO ATUALIZADO:", jog.cartas)
+        print("\nNOVA CARTA DA MESA:", mesa.carta)
+
+        quem_joga = 0 #próximo a jogar é o bot
