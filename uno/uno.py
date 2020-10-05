@@ -37,19 +37,9 @@ class Jogador(): #pai de  bot
         print("SE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
         e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
 
-        if e == "comprar":
-            carta_comprada = self.comprar_carta(descarte)
-            print("\nCARTA COMPRADA: ", carta_comprada)
-            carta_comprada_s = carta_comprada.split()
-            carta_mesa_s = carta_mesa.split()
-
-            if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1]:
-                print("CARTA COMPRADA FOI JOGADA")
-                return carta_comprada
-            else:
-                print("\nCARTA COMPRADA NÃO PODE SER JOGADA\nPORQUE A CARTA DA MESA É {}\nA CARTA COMPRADA FOI ADD AO SEU BARALHO" .format(carta_mesa))
-                self.cartas.append(carta_comprada)
-                return carta_mesa
+        if e == "comprar": #se o jogado escolher comprar
+            
+            return self.comprar_carta(descarte, carta_mesa) #executar função de comprar carta
 
         else:
             escolha = int(e) #índice da carta
@@ -84,8 +74,21 @@ class Jogador(): #pai de  bot
         else:
             return False
 
-    def comprar_carta(self, descarte):
-        return descarte[0]
+    def comprar_carta(self, descarte, carta_mesa):
+        carta_comprada = descarte[0] #pega a primeira carta do descarte
+
+        print("\nCARTA COMPRADA: ", carta_comprada)
+        carta_comprada_s = carta_comprada.split() #separa em numero/cor
+        carta_mesa_s = carta_mesa.split() #separa em numero/cor
+
+        if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1]: #se for jogável
+            print("CARTA COMPRADA FOI JOGADA")
+            return carta_comprada #retorna a carta comprada
+        else:
+            print("\nCARTA COMPRADA NÃO PODE SER JOGADA\nPORQUE A CARTA DA MESA É {}\nA CARTA COMPRADA FOI ADD AO SEU BARALHO" .format(carta_mesa))
+            self.cartas.append(carta_comprada) #carta comprada é adicionada ao baralho do jogador
+            return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
+
 
 class Bot(Jogador):
     def __init__(self, cartas):
@@ -114,15 +117,19 @@ class Bot(Jogador):
                 return carta_escolhida #retorna a carta escolhida
 
         if carta_foi_escolhida == False:
-            carta_comprada = self.comprar_carta(descarte)
-            print("\nCARTA COMPRADA PELO BOT: ", carta_comprada)
+            return self.comprar_carta(descarte, carta_mesa)
 
-            if carta_comprada[0] == carta_mesa[0] or carta_comprada[1] == carta_mesa[1]:
-                print("BOT JOGOU A CARTA")
-                return carta_comprada
-            else:
-                print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU")
-                self.cartas.append(carta_comprada)
+    def comprar_carta(self, descarte, carta_mesa):
+        carta_comprada = descarte[0] #pega a primeira carta do descarte
+        print("\nCARTA COMPRADA PELO BOT: ", carta_comprada)
+
+        if carta_comprada[0] == carta_mesa[0] or carta_comprada[1] == carta_mesa[1]: #se for jogável
+            print("BOT JOGOU A CARTA")
+            return carta_comprada #retorna a carta comprada
+        else:
+            print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU")
+            self.cartas.append(carta_comprada)
+            return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
 #MAIN
 #-----------
