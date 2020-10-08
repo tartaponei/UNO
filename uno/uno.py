@@ -11,7 +11,9 @@ BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho",
 "1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde",
 
 "bloquear vermelho", "bloquear amarelo", "bloquear azul", "bloquear verde",
-"retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde"]
+"retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde",
+
+"escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor"]
 
 #CLASSES
 #-----------
@@ -26,7 +28,7 @@ class Mesa():
             for p in range(len(self.descarte)):
                 carta_atual = self.descarte[p].split() #pega a carta de índice p e separa em duas (número / cor)
                         
-                if carta_atual[0] != "+4" and carta_atual[0] != "retornar" and carta_atual[0] != "bloquear": #se a carta não for especial
+                if carta_atual[0] != "+4" and carta_atual[0] != "retornar" and carta_atual[0] != "bloquear" and carta_atual[0] != "escolhe": #se a carta não for especial
                     i = 1
                     return self.descarte[p] #retorna a carta atual
 
@@ -66,7 +68,6 @@ class Jogador(): #pai de bot
                     print(self.cartas)
                     escolha = int(input("")) #jogador escolhe outra
                 else:
-                    #print("Essa carta pode ser escolhida")
                     carta = "certa"
                     carta_escolhida = self.cartas[escolha]
                     print("\nVOCÊ ESCOLHEU", carta_escolhida)
@@ -75,17 +76,18 @@ class Jogador(): #pai de bot
                         if self.cartas[i] == carta_escolhida: #se a carta atual for a mesma que ele escolheu
                             self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                             break
+                    
+                    if carta_escolhida == "escolhe cor":
+                        carta_escolhida = self.escolher_cor(carta_mesa)
 
                     return carta_escolhida #retorna a carta que ele escolheu
-
-    #def retorno-bloqueio(self, cartas, carta_mesa):
 
     def carta_possivel(self, cartas, indice, carta_mesa):
         carta = self.cartas[indice].split() #pega a carta escolhida e separa em duas (numero / cor)
         #print(carta)
         carta_mesa = carta_mesa.split() #separa a carta da mesa em duas (numero / cor)
 
-        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1]: #se os números ou as cores forem iguais
+        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais
             return True
         else:
             return False
@@ -107,6 +109,18 @@ class Jogador(): #pai de bot
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
+    def escolher_cor(self, carta_mesa):
+        print("VOCÊ JOGOU UMA CARTA CORINGA DE ESCOLHER COR\n\nDIGITE O NÚMERO CORRESPONDENTE À COR:\n1- VERMELHO\n2- AMARElO\n3- AZUL\n4-VERDE")
+        escolha = int(input("DIGITE: "))
+
+        if escolha == 1:
+            return "coringa vermelho"
+        elif escolha == 2:
+            return "coringa amarelo"
+        elif escolha == 3:
+            return "coringa azul"
+        elif escolha == 4:
+            return "coringa verde"
 
 class Bot(Jogador):
     def __init__(self, cartas):
@@ -114,9 +128,10 @@ class Bot(Jogador):
         self.carta_possivel
         self.vez
         self.comprar_carta
+        self.escolher_cor
 
     def vez(self, carta_mesa, descarte):
-        print("\n====================================================\n\nVEZ DA CPU")
+        print("\n====================================================\n\nVEZ DO BOT")
         print(self.cartas)
         
         carta_foi_escolhida = False
@@ -132,6 +147,9 @@ class Bot(Jogador):
                     if self.cartas[i] == carta_escolhida: #se a carta atual for a mesma que ele escolheu
                         self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                         break
+
+                if carta_escolhida == "escolhe cor":
+                        carta_escolhida = self.escolher_cor(carta_mesa, self.cartas)
 
                 return carta_escolhida #retorna a carta escolhida
 
@@ -155,11 +173,45 @@ class Bot(Jogador):
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
+    def escolher_cor(self, carta_mesa, cartas):
+        n_vermelho, n_amarelo, n_azul, n_verde = 0, 0, 0, 0
+
+        for i in range(len(cartas)):
+            carta_atual = cartas[i].split()
+
+            if carta_atual[1] == "vermelho":
+                n_vermelho += 1
+            elif carta_atual[1] == "amarelo":
+                n_amarelo += 1
+            elif carta_atual[1] == "azul":
+                n_azul += 1
+            elif carta_atual[1] == "verde":
+                n_verde += 1
+
+        cores = [n_vermelho, n_amarelo, n_azul, n_verde]
+        n_cor = max(cores)
+
+        for i in range(len(cores)):
+            if cores[i] == n_cor:
+                if cores[i] == n_vermelho:
+                    print("\nBOT ESCOLHEU VERMELHO")
+                    return "coringa vermelho"
+                elif cores[i] == n_amarelo:
+                    print("\nBOT ESCOLHEU AMARELO")
+                    return "coringa amarelo"
+                elif cores[i] == n_azul:
+                    print("\nBOT ESCOLHEU AZUL")
+                    return "coringa azul"
+                elif cores[i] == n_verde:
+                    print("\nBOT ESCOLHEU VERDE")
+                    return "coringa verde"
+
+
 #MAIN
 #-----------
 random.shuffle(BARALHO) #embaralha as cartas
 
-n = int(input("NÚMERO DE CARTAS PRA CADA JOGADOR: "))
+n = int(input("\nNÚMERO DE CARTAS PRA CADA JOGADOR: "))
 
 #---DISTRIBUIÇÂO DAS CARTAS---
 jog = Jogador(BARALHO[0:n]) #primeiras n cartas separadas pro jog
@@ -202,11 +254,10 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
 
         tipo_carta = mesa.carta.split()
 
-        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear":
-            quem_joga = 0
+        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear": #se for carta de bloqueio ou retorno
+            quem_joga = 0 #repete a vez
         else:
             quem_joga = 1 #próximo a jogar é o jogador
-        print(quem_joga)
 
     else:
         #---VEZ DO JOGADOR---
@@ -219,12 +270,12 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
             print("\nVOCÊ DISSE UNO!!")
 
         tipo_carta = mesa.carta.split()
-        
-        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear":
-            quem_joga = 1
+
+        #---BLOQUEIO / RETORNO---
+        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear": #se for carta de bloqueio ou retorno
+            quem_joga = 1 #repete a vez
         else:
             quem_joga = 0 #próximo a jogar é o bot
-        print(quem_joga)
 
 if len(jog.cartas) == 0:
     vencedor = "VOCÊ"
