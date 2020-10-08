@@ -29,14 +29,14 @@
 
 10- o outro jogador joga
 	10.1- se o número anterior for 0:
-		10.1.1- 1 é escolhido
-		10.1.2- ir para passo 7.2
+		10.1.1- 1 é escolhido -OK!!
+		10.1.2- ir para passo 7.2 -OK!!
 	10.2- se o número anterior for 1:
-		10.2.1- 0 é escolhido
-		10.2.2- ir para passo 7.3
+		10.2.1- 0 é escolhido -OK!!
+		10.2.2- ir para passo 7.3 -OK!!
 
 11- caso um dos jogadores tenha apenas uma carta:
-	11.1- "uno" aparece na tela
+	11.1- "uno" aparece na tela -OK!!
 
 ========================
 
@@ -124,3 +124,8 @@ COMPRAR CARTA:
 	4.2- ir para o passo 5 -OK!!
 
 5- termina a função -OK!!
+
+======================
+sistema de bloqueio e retorno:
+1. se o usuário esolher a carta de retorno ou de bloqueio:
+	1.1 - ele joga de novo -OK!!

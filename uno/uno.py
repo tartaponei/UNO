@@ -8,7 +8,10 @@ import random
 BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", 
 "1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",
 "1 azul", "2 azul", "3 azul", "4 azul", "5 azul", "6 azul", "7 azul", "8 azul", "9 azul",
-"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde"]
+"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde",
+
+"bloquear vermelho", "bloquear amarelo", "bloquear azul", "bloquear verde",
+"retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde"]
 
 #CLASSES
 #-----------
@@ -23,7 +26,7 @@ class Mesa():
             for p in range(len(self.descarte)):
                 carta_atual = self.descarte[p].split() #pega a carta de índice p e separa em duas (número / cor)
                         
-                if carta_atual[0] != "+4": #se a carta não for especial
+                if carta_atual[0] != "+4" and carta_atual[0] != "retornar" and carta_atual[0] != "bloquear": #se a carta não for especial
                     i = 1
                     return self.descarte[p] #retorna a carta atual
 
@@ -74,6 +77,8 @@ class Jogador(): #pai de bot
                             break
 
                     return carta_escolhida #retorna a carta que ele escolheu
+
+    #def retorno-bloqueio(self, cartas, carta_mesa):
 
     def carta_possivel(self, cartas, indice, carta_mesa):
         carta = self.cartas[indice].split() #pega a carta escolhida e separa em duas (numero / cor)
@@ -195,7 +200,13 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         if len(bot.cartas) == 1: #caso tenha uma carta
             print("\nBOT DISSE UNO!!")
 
-        quem_joga = 1 #próximo a jogar é o jogador
+        tipo_carta = mesa.carta.split()
+
+        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear":
+            quem_joga = 0
+        else:
+            quem_joga = 1 #próximo a jogar é o jogador
+        print(quem_joga)
 
     else:
         #---VEZ DO JOGADOR---
@@ -207,7 +218,13 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         if len(jog.cartas) == 1: #caso tenha uma carta
             print("\nVOCÊ DISSE UNO!!")
 
-        quem_joga = 0 #próximo a jogar é o bot
+        tipo_carta = mesa.carta.split()
+        
+        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear":
+            quem_joga = 1
+        else:
+            quem_joga = 0 #próximo a jogar é o bot
+        print(quem_joga)
 
 if len(jog.cartas) == 0:
     vencedor = "VOCÊ"
