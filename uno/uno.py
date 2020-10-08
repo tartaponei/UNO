@@ -77,8 +77,8 @@ class Jogador(): #pai de bot
                             self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                             break
                     
-                    if carta_escolhida == "escolhe cor":
-                        carta_escolhida = self.escolher_cor(carta_mesa)
+                    if carta_escolhida == "escolhe cor": #se for coringa
+                        carta_escolhida = self.escolher_cor(carta_mesa) #executar função de escolher cor
 
                     return carta_escolhida #retorna a carta que ele escolheu
 
@@ -87,7 +87,7 @@ class Jogador(): #pai de bot
         #print(carta)
         carta_mesa = carta_mesa.split() #separa a carta da mesa em duas (numero / cor)
 
-        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais
+        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais ou for carta especial
             return True
         else:
             return False
@@ -148,8 +148,8 @@ class Bot(Jogador):
                         self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                         break
 
-                if carta_escolhida == "escolhe cor":
-                        carta_escolhida = self.escolher_cor(carta_mesa, self.cartas)
+                if carta_escolhida == "escolhe cor": #se for coringa
+                        carta_escolhida = self.escolher_cor(carta_mesa, self.cartas) #executar função de escolher cor
 
                 return carta_escolhida #retorna a carta escolhida
 
@@ -174,13 +174,13 @@ class Bot(Jogador):
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
     def escolher_cor(self, carta_mesa, cartas):
-        n_vermelho, n_amarelo, n_azul, n_verde = 0, 0, 0, 0
+        n_vermelho, n_amarelo, n_azul, n_verde = 0, 0, 0, 0 #contadores pra escolher a cor que o bot mais tem na mão
 
         for i in range(len(cartas)):
             carta_atual = cartas[i].split()
 
-            if carta_atual[1] == "vermelho":
-                n_vermelho += 1
+            if carta_atual[1] == "vermelho": #se a carta atual for vermelha
+                n_vermelho += 1 #+1 no contador
             elif carta_atual[1] == "amarelo":
                 n_amarelo += 1
             elif carta_atual[1] == "azul":
@@ -189,13 +189,13 @@ class Bot(Jogador):
                 n_verde += 1
 
         cores = [n_vermelho, n_amarelo, n_azul, n_verde]
-        n_cor = max(cores)
+        n_cor = max(cores) #maior número da lista com os contadores
 
-        for i in range(len(cores)):
-            if cores[i] == n_cor:
-                if cores[i] == n_vermelho:
+        for i in range(len(cores)): #pra cada quantidade de cores
+            if cores[i] == n_cor: #se a atual for igual a maior
+                if cores[i] == n_vermelho: #e se essa atual for a mesma quantidade do vermelho
                     print("\nBOT ESCOLHEU VERMELHO")
-                    return "coringa vermelho"
+                    return "coringa vermelho" #retorna que é vermelho (mesma lógica pros outros)
                 elif cores[i] == n_amarelo:
                     print("\nBOT ESCOLHEU AMARELO")
                     return "coringa amarelo"
