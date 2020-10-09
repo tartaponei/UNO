@@ -4,17 +4,16 @@ import random
 from colorama import Fore, Style, Back, init
 
 #VARIAVEIS INICIAIS
-#-------------------
-#"+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa", 
-BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", 
-"1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo",
-"1 azul", "2 azul", "3 azul", "4 azul", "5 azul", "6 azul", "7 azul", "8 azul", "9 azul",
-"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde",
+#------------------- 
+BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", "+2 vermelho", 
+"1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo", "+2 amarelo",
+"1 azul", "2 azul", "3 azul", "4 azul", "5 azul", "6 azul", "7 azul", "8 azul", "9 azul", "+2 azul",
+"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde", "+2 verde",
 
 "bloquear vermelho", "bloquear amarelo", "bloquear azul", "bloquear verde",
 "retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde",
 
-"escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor"]
+"escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor", "+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa"]
 
 init(autoreset=True) #todas as mudanças de cor vão ser resetadas quando acabar a linha
 
@@ -31,7 +30,7 @@ class Mesa():
             for p in range(len(self.descarte)):
                 carta_atual = self.descarte[p].split() #pega a carta de índice p e separa em duas (número / cor)
                         
-                if carta_atual[0] != "+4" and carta_atual[0] != "retornar" and carta_atual[0] != "bloquear" and carta_atual[0] != "escolhe": #se a carta não for especial
+                if carta_atual[0] != "+4" and carta_atual[0] != "+2" and carta_atual[0] != "retornar" and carta_atual[0] != "bloquear" and carta_atual[0] != "escolhe": #se a carta não for especial
                     i = 1
                     return self.descarte[p] #retorna a carta atual
 
@@ -69,7 +68,7 @@ class Jogador(): #pai de bot
                     print("\nVOCÊ ESCOLHEU", end=' ')
                     baralho_colorido(self.cartas[escolha]) #colocar carta colorida
                     print("Essa carta não pode ser escolhida. ESCOLHA OUTRA!")
-                    print(self.cartas)
+                    baralho_colorido(self.cartas) #colocar carta colorida
                     escolha = int(input("")) #jogador escolhe outra
                 else:
                     carta = "certa"
@@ -82,8 +81,19 @@ class Jogador(): #pai de bot
                             self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                             break
                     
+                    carta_escolhida_s = carta_escolhida.split()
+
                     if carta_escolhida == "escolhe cor": #se for coringa
                         carta_escolhida = self.escolher_cor(carta_mesa) #executar função de escolher cor
+
+                    elif carta_escolhida_s[0] == "+2":
+                        compra_por_carta(2, "jog")
+                    
+                    elif carta_escolhida_s[0] == "+4":
+                        compra_por_carta(4, "jog")
+
+                        print("\nVOCÊ JOGOU UM +4")
+                        self.vez(carta_escolhida, descarte)
 
                     return carta_escolhida #retorna a carta que ele escolheu
 
@@ -92,7 +102,7 @@ class Jogador(): #pai de bot
         #print(carta)
         carta_mesa = carta_mesa.split() #separa a carta da mesa em duas (numero / cor)
 
-        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais ou for carta especial
+        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or (carta[0] == "+2" and carta[1] == carta_mesa[1]) or carta_mesa[0] == "+4" or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais ou for carta especial
             return True
         else:
             return False
@@ -116,6 +126,7 @@ class Jogador(): #pai de bot
             self.cartas.append(carta_comprada) #carta comprada é adicionada ao baralho do jogador
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
+
 
     def escolher_cor(self, carta_mesa):
         print("VOCÊ JOGOU UMA CARTA CORINGA DE ESCOLHER COR\n\nDIGITE O NÚMERO CORRESPONDENTE À COR:" + Fore.RED + "\n1- VERMELHO" + Fore.YELLOW + "\n2- AMARElO" + Fore.BLUE + "\n3- AZUL" + Fore.GREEN + "\n4- VERDE" + Fore.WHITE)
@@ -157,8 +168,19 @@ class Bot(Jogador):
                         self.cartas.pop(i) #exclui carta escolhida pra mesa do baralho do jog
                         break
 
+                carta_escolhida_s = carta_escolhida.split()
+
                 if carta_escolhida == "escolhe cor": #se for coringa
-                        carta_escolhida = self.escolher_cor(carta_mesa, self.cartas) #executar função de escolher cor
+                    carta_escolhida = self.escolher_cor(carta_mesa, self.cartas) #executar função de escolher cor
+
+                elif carta_escolhida_s[0] == "+2":
+                    compra_por_carta(2, "bot")
+                    
+                elif carta_escolhida_s[0] == "+4":
+                    compra_por_carta(4, "bot")
+
+                    print("\nBOT JOGOU UM +4")
+                    self.vez(carta_escolhida, descarte)
 
                 return carta_escolhida #retorna a carta escolhida
 
@@ -235,7 +257,7 @@ def baralho_colorido(cartas):
             elif carta_atual[1] == "verde":
                 print(Fore.GREEN + cartas[i], end ='\n' if i==len(cartas)-1 else ' - ')
 
-            elif carta_atual[1] == "cor":
+            elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
                 print(Back.WHITE + Fore.BLACK + cartas[i], end ='' if i==len(cartas)-1 else ' - ')
 
     else: #se não for lista (ou seja, se for uma carta só)
@@ -253,9 +275,22 @@ def baralho_colorido(cartas):
         elif carta_atual[1] == "verde":
             print(Style.BRIGHT + Fore.GREEN + cartas)
 
-        elif carta_atual[1] == "cor":
+        elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
             print(Style.BRIGHT + 
             Back.WHITE + Fore.BLACK + cartas)
+
+def compra_por_carta(n, jogad):
+    if jogad == "jog":
+        for i in range(n):
+            bot.cartas.append(mesa.descarte[i])
+            mesa.descarte.pop(i)
+        print("\nBOT TEVE QUE COMPRAR", n, "CARTA(S)")
+
+    else:
+        for i in range(n):
+            jog.cartas.append(mesa.descarte[i])
+            mesa.descarte.pop(i)
+        print("\nVOCÊ TEVE QUE COMPRAR", n, "CARTA(S)")
 
 #MAIN
 #-----------
@@ -302,11 +337,12 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         mesa.carta = bot.vez(mesa.carta, mesa.descarte)
 
         #print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
-        print(Style.BRIGHT + "\nNOVA CARTA DA MESA:", end=' ')
-        baralho_colorido(mesa.carta) #colocar carta colorida
 
         print("\nBOT TEM", len(bot.cartas), "CARTAS")
         print("VOCÊ TEM", len(jog.cartas), "CARTAS")
+
+        print(Style.BRIGHT + "\nNOVA CARTA DA MESA:", end=' ')
+        baralho_colorido(mesa.carta) #colocar carta colorida
 
         if len(bot.cartas) == 1: #caso tenha uma carta
             print("\nBOT DISSE UNO!!")
@@ -325,11 +361,11 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         print("\nSEU BARALHO ATUALIZADO:", end=' ')
         baralho_colorido(jog.cartas) #colocar carta colorida
 
-        print(Style.BRIGHT + "\nNOVA CARTA DA MESA:", end=' ')
-        baralho_colorido(mesa.carta) #colocar carta colorida
-
         print("\nBOT TEM", len(bot.cartas), "CARTAS")
         print("VOCÊ TEM", len(jog.cartas), "CARTAS")
+
+        print(Style.BRIGHT + "\nNOVA CARTA DA MESA:", end=' ')
+        baralho_colorido(mesa.carta) #colocar carta colorida
 
         if len(jog.cartas) == 1: #caso tenha uma carta
             print("\nVOCÊ DISSE UNO!!")

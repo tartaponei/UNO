@@ -1,32 +1,32 @@
-1- se bot tiver carta de bloqueio ou retorno da cor da mesa:
-    1.1- jogar essa carta antes de ir pras outras escolhas
+1- se bot tiver carta de bloqueio ou retorno da cor da mesa: -OK!!
+    1.1- jogar essa carta antes de ir pras outras escolhas -OK!!
 
-2- se o adversário tiver <=3 cartas:
-    2.1- se o bot tiver +4:
-        2.1.1- jogar +4
-    2.2- se não tiver +4:
-        2.2.1- se tiver +2 da cor da mesa:
-            2.2.1.1- jogar +2
-        2.2.2- se não tiver:
-            2.2.2.1- se tiver carta normal pra jogar:
-                2.2.2.1.1- jogar
-            2.2.2.2- se não tiver:
-                2.2.2.2.1- se tiver coringa:
-                    2.2.2.2.1.1- jogar coringa
-                2.2.2.2.2- se não tiver:
-                    2.2.2.2.2.1- comprar
+2- se o adversário tiver <=3 cartas: -OK!!
+    2.1- se o bot tiver +4: -OK!!
+        2.1.1- jogar +4 -OK!!
+    2.2- se não tiver +4: -OK!!
+        2.2.1- se tiver +2 da cor da mesa: -OK!!
+            2.2.1.1- jogar +2 -OK!!
+        2.2.2- se não tiver: -OK!!
+            2.2.2.1- se tiver carta -OK!!normal pra jogar:
+                2.2.2.1.1- jogar -OK!!
+            2.2.2.2- se não tiver: -OK!!
+                2.2.2.2.1- se tiver coringa: -OK!!
+                    2.2.2.2.1.1- jogar coringa -OK!!
+                2.2.2.2.2- se não tiver: -OK!!
+                    2.2.2.2.2.1- comprar -OK!!
 
 3- se o adversário tiver >3 cartas:
-    3.1- se o bot tiver +2 da cor da mesa:
-        3.1.1- jogar +2
-    3.2- se não tiver:
-        3.2.1- se o bot não tiver carta numérica pra jogar:
-            3.2.1.1- se tiver coringa:
-                3.2.1.1.1- jogar coringa
-            3.2.1.2- se não tiver:
-                3.2.1.2.1- se tiver +4:
-                    3.2.1.2.1.1- jogar +4
-                3.2.1.2.2- se não tiver:
+    3.1- se o bot tiver +2 da cor da mesa: -OK!!
+        3.1.1- jogar +2 -OK!!
+    3.2- se não tiver: -OK!!
+        3.2.1- se o bot não tiver carta numérica pra jogar: - OK!!
+            3.2.1.1- se tiver coringa: -OK!!
+                3.2.1.1.1- jogar coringa -OK!!
+            3.2.1.2- se não tiver: -OK!!
+                3.2.1.2.1- se tiver +4: -OK!!
+                    3.2.1.2.1.1- jogar +4 -OK!!
+                3.2.1.2.2- se não tiver: -OK!!
                     3.2.1.2.2.1- comprar
-        3.2.2- se tiver:
-            3.2.2.1- jogar
+        3.2.2- se tiver: -OK!!
+            3.2.2.1- jogar -OK!!
