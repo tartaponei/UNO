@@ -56,7 +56,7 @@ class Jogador(): #pai de bot
         carta = "errada" #carta inicialmente sendo errada
         e = "ab" #iniciada assim pra entrar no if a primeira vez
 
-        console.print("\n====================================================\n\n[bold light_pink3]-->>> SUA VEZ DE JOGAR <<<--[bold light_pink3]\nEscolha sua carta de acordo com o índice (começando do 0):")
+        console.print("\n====================================================\n\n[bold light_pink3]-->>> SUA VEZ DE JOGAR <<<--[bold light_pink3]\nEscolha sua carta de acordo com o índice (começando do 0):\n")
         print("SEU BARALHO:", end=' ')
         baralho_colorido(self.cartas) #colocar carta colorida
         print("\nSE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
@@ -104,6 +104,11 @@ class Jogador(): #pai de bot
                     
                     elif carta_escolhida_s[0] == "+4":
                         compra_por_carta(4, "jog")
+                        carta = self.vez(carta_escolhida, descarte)
+                        carta_escolhida = carta
+
+                    elif carta_escolhida_s[0] == "bloquear" or carta_escolhida_s[0] == "retornar":
+                        print("entrei")
                         carta = self.vez(carta_escolhida, descarte)
                         carta_escolhida = carta
 
@@ -301,8 +306,8 @@ class Bot(Jogador):
             return "comprar"
 
     def vez(self, carta_mesa, descarte):
-        console.print("\n====================================================\n\n[bold light_pink3]-->>> VEZ DO BOT <<<--[/bold light_pink3]")
-        print(self.cartas)
+        console.print("\n====================================================\n\n[bold light_pink3]-->>> VEZ DO BOT <<<--[/bold light_pink3]\n")
+        #print(self.cartas)
         
         carta_escolhida = self.carta_possivel(carta_mesa, jog.cartas, mesa.descarte) #executa a função pra ver se a carta é certa
 
@@ -329,6 +334,10 @@ class Bot(Jogador):
             
         elif carta_escolhida_s[0] == "+4":
             compra_por_carta(4, "bot")
+            carta = self.vez(carta_escolhida, descarte)
+            carta_escolhida = carta
+
+        elif carta_escolhida_s[0] == "bloquear" or carta_escolhida_s[0] == "retornar":
             carta = self.vez(carta_escolhida, descarte)
             carta_escolhida = carta
 
@@ -407,7 +416,7 @@ def baralho_colorido(cartas):
                 console.print("[bold green]" + cartas[i] + "[/bold green]", end ='\n' if i==len(cartas)-1 else ' - ')
 
             elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
-                console.print("[reverse]" + cartas[i] + "[/reverse]", end ='' if i==len(cartas)-1 else ' - ')
+                console.print("[bold medium_purple2]" + cartas[i] + "[/bold medium_purple2]", end ='' if i==len(cartas)-1 else ' - ')
 
     else: #se não for lista (ou seja, se for uma carta só)
         carta_atual = cartas.split()
@@ -425,7 +434,7 @@ def baralho_colorido(cartas):
             console.print("[bold green]" + cartas + "[/bold green]")
 
         elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
-            console.print("[reverse]" + cartas + "[/reverse]")
+            console.print("[bold medium_purple2]" + cartas + "[/bold medium_purple2]")
 
 def compra_por_carta(n, jogad):
     if jogad == "jog":
@@ -445,7 +454,7 @@ def compra_por_carta(n, jogad):
 console = Console()
 
 console.print("\n[u bold red]>>>> UNO EM PYTHON PLAYER VS CPU <<<<[/u bold red]")
-console.print("\n[i bold violet]>> ESSE PROJETO FOI FEITO POR GITHUB.COM/TARTAPONEI <<[/i bold violet]\n[i bold pink3]>> DIVIRTA-SE :)) <<[/i bold pink3]")
+console.print("\n[i bold medium_purple4]>> ESSE PROJETO FOI FEITO POR GITHUB.COM/TARTAPONEI <<[/i bold medium_purple4]\n[i bold pink3]>> DIVIRTA-SE :)) <<[/i bold pink3]")
 random.shuffle(BARALHO) #embaralha as cartas
 
 n = int(input("\nNÚMERO DE CARTAS PRA CADA JOGADOR: "))
@@ -458,11 +467,11 @@ bot = Bot(BARALHO[n:n*2]) #as próximas n cartas pro bot
 
 descarte = BARALHO[n*2:-1] #restante das cartas pro descarte
 
-console.print("\n[bold u reverse]O JOGO COMEÇOU![/bold u reverse]\n")
+console.print("\n\n[bold u reverse]>>> O JOGO COMEÇOU!<<<[/bold u reverse]\n")
 
 console.print("[bold]\nSEU BARALHO INICIAL:[/bold]", end=' ')
 baralho_colorido(jog.cartas) #colocar carta colorida
-print("\nBOT:", bot.cartas)
+#print("\nBOT:", bot.cartas)
 
 console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)))
 console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)))
@@ -500,15 +509,14 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
         baralho_colorido(mesa.carta) #colocar carta colorida
 
+        mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
+
         if len(bot.cartas) == 1: #caso tenha uma carta
             console.print("[bold u]\nBOT DISSE UNO!![/bold u]")
 
         tipo_carta = mesa.carta.split()
 
-        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear": #se for carta de bloqueio ou retorno
-            quem_joga = 0 #repete a vez
-        else:
-            quem_joga = 1 #próximo a jogar é o jogador
+        quem_joga = 1 #próximo a jogar é o jogador
 
     else:
         #---VEZ DO JOGADOR---
@@ -523,16 +531,14 @@ while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois b
         console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
         baralho_colorido(mesa.carta) #colocar carta colorida
 
+        mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
+
         if len(jog.cartas) == 1: #caso tenha uma carta
             console.print("[bold u]\nVOCÊ DISSE UNO!![/bold u]")
 
         tipo_carta = mesa.carta.split()
 
-        #---BLOQUEIO / RETORNO---
-        if tipo_carta[0] == "retornar" or tipo_carta[0] == "bloquear": #se for carta de bloqueio ou retorno
-            quem_joga = 1 #repete a vez
-        else:
-            quem_joga = 0 #próximo a jogar é o bot
+        quem_joga = 0 #próximo a jogar é o bot
 
 if len(jog.cartas) == 0:
     vencedor = "VOCÊ"
