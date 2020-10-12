@@ -59,15 +59,17 @@ class Jogador(): #pai de bot
         
         while repetir == 1:
             e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
-            if e.isnumeric() == False and e != "comprar" or int(e) > len(self.cartas)-1 or int(e) == 0:
+            if e.isnumeric() == False and e != "comprar":
                 console.print("\nVOCÊ DIGITOU ALGO INVÁLIDO, DIGITE DE NOVO", style="bold")
+            elif e.isnumeric == True and (int(e) > len(self.cartas) or int(e)) == 0:
+                console.print("\nVOCÊ DIGITOU UM NÚMERO INVÁLIDO, DIGITE DE NOVO", style="bold")
             else:
                 repetir = 0
                 break
 
         print("\n====================================================") ; sleep(0.4)
 
-        if e == "comprar": #se o jogado escolher comprar
+        if e == "comprar": #se o jogador escolher comprar
             return self.comprar_carta(descarte, carta_mesa) #executar função de comprar carta
 
         else:
@@ -79,7 +81,7 @@ class Jogador(): #pai de bot
                 if carta_certa == False: #se não for certa
                     console.print("\n[bold]VOCÊ ESCOLHEU[/bold]", end=' ')
                     baralho_colorido(self.cartas[escolha]) #colocar carta colorida
-                    console.print("Essa carta não pode ser escolhida. [bold]ESCOLHA OUTRA![/bold]")
+                    console.print("Essa carta não pode ser escolhida porque a carta da mesa é" + mesa.carta + "[bold]ESCOLHA OUTRA![/bold]")
                     baralho_colorido(self.cartas) #colocar carta colorida
                     escolha = int(input("DIGITE: ")) #jogador escolhe outra
                 else:
@@ -536,13 +538,10 @@ try:
         baralho_colorido(mesa.carta) ; sleep(1)
 
         #---EXCLUI A CARTA DA MESA DO DESCARTE---
-        i = 0 #inicializador pra teste
-        while i == 0: #enquanto o inicializador for0
+        for i in range(len(mesa.descarte)): #enquanto o inicializador for0
             if mesa.descarte[i] == mesa.carta: #se a carta atual for a mesma da mesa
-                del(mesa.descarte[i]) #carta atual é excluída
-                i = 1 #inicializador passa a ser 1
-
-        #print("DESCARTE:", mesa.descarte)
+                mesa.descarte.pop(i) #carta atual é excluída
+                break
 
         #---PRIMEIRA RODADA---
         quem_joga = random.randint(0, 1)
@@ -605,4 +604,4 @@ try:
         console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não':", end=' ', style="bold pink3")
         reiniciar = input("")
 except:
-    console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")
+    console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")'''
