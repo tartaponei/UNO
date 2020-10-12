@@ -498,6 +498,7 @@ try:
 
     while reiniciar == "sim":
         random.shuffle(BARALHO) #embaralha as cartas
+        print("\n")
 
         #---TABELA DE PLACAR---
         placar = Table(box=box.MINIMAL, title="Placar Atual", style="bold orange3")
@@ -604,4 +605,4 @@ try:
         console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não':", end=' ', style="bold pink3")
         reiniciar = input("")
 except:
-    console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")'''
+    console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")
