@@ -1,8 +1,10 @@
 #BIBLIOTECAS
 #------------
-import sys
 import random
 from rich.console import Console
+from rich.table import Table
+from rich import box
+from time import sleep
 
 #VARIAVEIS INICIAIS
 #------------------- 
@@ -14,20 +16,9 @@ BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho",
 "bloquear vermelho", "bloquear amarelo", "bloquear azul", "bloquear verde",
 "retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde",
 
-"escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor", "+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa",
-
-"1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho", "6 vermelho", "7 vermelho", "8 vermelho", "9 vermelho", "+2 vermelho", 
-"1 amarelo", "2 amarelo", "3 amarelo", "4 amarelo", "5 amarelo", "6 amarelo", "7 amarelo", "8 amarelo", "9 amarelo", "+2 amarelo",
-"1 azul", "2 azul", "3 azul", "4 azul", "5 azul", "6 azul", "7 azul", "8 azul", "9 azul", "+2 azul",
-"1 verde", "2 verde", "3 verde", "4 verde", "5 verde", "6 verde", "7 verde", "8 verde", "9 verde", "+2 verde",
-
-"bloquear vermelho", "bloquear amarelo", "bloquear azul", "bloquear verde",
-"retornar vermelho", "retornar amarelo", "retornar azul", "retornar verde",
-
 "escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor", "+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa"]
 
-#CONDIÇÕES (PRA FACILITAR O IF):
-#--------------------------------
+BARALHO.extend(BARALHO) #pra dobrar o baralho sem digitar muito
 
 #CLASSES
 #-----------
@@ -58,22 +49,29 @@ class Jogador(): #pai de bot
     def vez(self, carta_mesa, descarte):
         carta = "errada" #carta inicialmente sendo errada
         e = "ab" #iniciada assim pra entrar no if a primeira vez
+        repetir = 1
 
-        console.print("\n====================================================\n\n[bold light_pink3]-->>> SUA VEZ DE JOGAR <<<--[bold light_pink3]\nEscolha sua carta de acordo com o índice (começando do 0):\n")
+        print("\n====================================================\n") ; sleep(1)
+        console.print("[bold light_pink3]-->>> SUA VEZ DE JOGAR <<<--[bold light_pink3]\nEscolha sua carta de acordo com o índice (de 1 a {}):\n" .format(len(self.cartas)))
         print("SEU BARALHO:", end=' ')
         baralho_colorido(self.cartas) #colocar carta colorida
         print("\nSE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
-
-        while e.isnumeric() == False and e != "comprar" or int(e) > len(self.cartas)-1: #se algo inválido for digitado
+        
+        while repetir == 1:
             e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
+            if e.isnumeric() == False and e != "comprar" or int(e) > len(self.cartas)-1 or int(e) == 0:
+                console.print("\nVOCÊ DIGITOU ALGO INVÁLIDO, DIGITE DE NOVO", style="bold")
+            else:
+                repetir = 0
+                break
 
-        print("\n====================================================")
+        print("\n====================================================") ; sleep(0.4)
 
         if e == "comprar": #se o jogado escolher comprar
             return self.comprar_carta(descarte, carta_mesa) #executar função de comprar carta
 
         else:
-            escolha = int(e) #índice da carta
+            escolha = int(e)-1 #índice da carta
 
             while carta == "errada": #enquanto a carta for errada
                 carta_certa = self.carta_possivel(self.cartas, escolha, carta_mesa) #executa a função pra ver se a carta é certa
@@ -328,7 +326,7 @@ class Bot(Jogador):
             carta_escolhida = self.comprar_carta(descarte, carta_mesa)
         else:
             console.print("O BOT ESCOLHEU", end=' ', style="bold")
-            baralho_colorido(carta_escolhida) #colocar carta colorida
+            baralho_colorido(carta_escolhida) ; sleep(2) #colocar carta colorida
 
             for i in range(len(self.cartas)):
                 if self.cartas[i] == carta_escolhida: #se a carta atual for a mesma que ele escolheu
@@ -364,7 +362,7 @@ class Bot(Jogador):
 
     def comprar_carta(self, descarte, carta_mesa):
         carta_comprada = descarte[0] #pega a primeira carta do descarte
-        console.print("BOT COMPROU UMA CARTA", style="bold")
+        console.print("BOT COMPROU UMA CARTA", style="bold") ; sleep(2)
         #baralho_colorido(carta_comprada) #colocar carta colorida
 
         carta_comprada_s = carta_comprada.split() #separa em numero/cor
@@ -381,11 +379,11 @@ class Bot(Jogador):
 
         if any(CONDICOES_COMPRA_BOT): #se pelo menos uma das condições de compra forem true (se for jogável)
             console.print("BOT JOGOU A CARTA COMPRADA", end=' ', style="bold")
-            baralho_colorido(carta_comprada)
+            baralho_colorido(carta_comprada) ; sleep(2)
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_comprada #retorna a carta comprada
         else:
-            console.print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU", style="bold")
+            console.print("A CARTA NÃO PODE SER JOGADA E O BOT NÃO A JOGOU", style="bold") ; sleep(2)
             self.cartas.append(carta_comprada)
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
@@ -468,125 +466,143 @@ def compra_por_carta(n, jogad):
         for i in range(n):
             bot.cartas.append(mesa.descarte[i])
             mesa.descarte.pop(i)
-        console.print("\nBOT TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u")
+        console.print("\nBOT TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u") ; sleep(1)
 
     elif jogad == "bot":
         for i in range(n):
             jog.cartas.append(mesa.descarte[i])
             mesa.descarte.pop(i)
-        console.print("\nVOCÊ TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u")
+        console.print("\nVOCÊ TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u") ; sleep(1)
 
 #MAIN
 #-----------
-console = Console()
-reiniciar = "sim"
-v_bot, v_jog = 0, 0
+try:
+    console = Console()
+    reiniciar = "sim"
+    v_bot, v_jog = 0, 0
 
-console.print("\n[u bold red]>>>> UNO EM PYTHON PLAYER VS CPU <<<<[/u bold red]")
-console.print("\n[i bold medium_purple4]>> ESSE PROJETO FOI FEITO POR GITHUB.COM/TARTAPONEI <<[/i bold medium_purple4]\n[i bold pink3]>> DIVIRTA-SE :)) <<[/i bold pink3]")
-random.shuffle(BARALHO) #embaralha as cartas
+    print("\n")
 
-while reiniciar == "sim":
-    console.print("\n--> NÚMERO DE VITÓRIAS <--\nBOT:", end=' ', style="bold orange1")
-    console.print(v_bot)
-    console.print("VOCÊ:", end=' ', style="bold orange1")
-    console.print(v_jog)
+    #---TABELA DE APRESENTAÇÃO---
+    titulo = Table(box=box.HEAVY_HEAD, style="bold indian_red")
 
-    n = 0
+    titulo.add_column(">>>> UNO EM PYTHON PLAYER VS CPU <<<<", style="i bold medium_purple4", justify="center")
+    titulo.add_row(">> ESSE PROJETO FOI FEITO POR GITHUB.COM/TARTAPONEI <<")
+    titulo.add_row(">> DIVIRTA-SE :)) <<", style="i bold pink3")
 
-    while n <= 3:
-        n = int(input("\nDIGITE O NÚMERO DE CARTAS PRA CADA JOGADOR (A PARTIR DE 4): "))
+    console.print(titulo) ; sleep(4)
 
-    #print("\033[H\033[J") #limpa a tela
+    print("\n=============================================================\n")
 
-    #---DISTRIBUIÇÂO DAS CARTAS---
-    jog = Jogador(BARALHO[0:n]) #primeiras n cartas separadas pro jog
-    bot = Bot(BARALHO[n:n*2]) #as próximas n cartas pro bot
+    while reiniciar == "sim":
+        random.shuffle(BARALHO) #embaralha as cartas
 
-    descarte = BARALHO[n*2:-1] #restante das cartas pro descarte
+        #---TABELA DE PLACAR---
+        placar = Table(box=box.MINIMAL, title="Placar Atual", style="bold orange3")
 
-    console.print("\n\n[bold u reverse]>>> O JOGO COMEÇOU!<<<[/bold u reverse]\n")
+        placar.add_column("BOT", justify="center", style="magenta")
+        placar.add_column("VOCÊ", justify="center", style="magenta")
+        placar.add_row(str(v_bot), (str(v_jog)))
 
-    console.print("[bold]\nSEU BARALHO INICIAL:[/bold]", end=' ')
-    baralho_colorido(jog.cartas) #colocar carta colorida
-    #print("\nBOT:", bot.cartas)
+        console.print(placar) ; sleep(1)
 
-    console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3")
-    console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3")
+        n = 0
 
-    #---ESCOLHE A CARTA DA MESA---
-    mesa = Mesa(descarte)
-    mesa.carta = mesa.escolhe_carta_mesa() #escolhe a carta da mesa
+        while n <= 3:
+            n = int(input("\nDIGITE O NÚMERO DE CARTAS PRA CADA JOGADOR (A PARTIR DE 4): "))
 
-    console.print("\n[bold u]CARTA DA MESA:[/bold u]", end=' ')
-    baralho_colorido(mesa.carta)
+        #print("\033[H\033[J") #limpa a tela
 
-    #---EXCLUI A CARTA DA MESA DO DESCARTE---
-    i = 0 #inicializador pra teste
-    while i == 0: #enquanto o inicializador for0
-        if mesa.descarte[i] == mesa.carta: #se a carta atual for a mesma da mesa
-            del(mesa.descarte[i]) #carta atual é excluída
-            i = 1 #inicializador passa a ser 1
+        #---DISTRIBUIÇÂO DAS CARTAS---
+        jog = Jogador(BARALHO[0:n]) #primeiras n cartas separadas pro jog
+        bot = Bot(BARALHO[n:n*2]) #as próximas n cartas pro bot
 
-    #print("DESCARTE:", mesa.descarte)
+        descarte = BARALHO[n*2:-1] #restante das cartas pro descarte
 
-    #---PRIMEIRA RODADA---
-    quem_joga = random.randint(0, 1)
+        console.print("\n\n[bold u reverse]>>> O JOGO COMEÇOU!<<<[/bold u reverse]\n") ; sleep(0.2)
 
-    #---CONTINUAÇÃO DO JOGO---
-    while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois bater
-        if quem_joga == 0: #se quem jogou antes foi o jogador
-            #---VEZ DO BOT---
-            mesa.carta = bot.vez(mesa.carta, mesa.descarte)
+        console.print("[bold]\nSEU BARALHO INICIAL:[/bold]", end=' ')
+        baralho_colorido(jog.cartas) ; sleep(3) #colocar carta colorida
+        #print("\nBOT:", bot.cartas)
 
-            #print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
+        console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3") ; sleep(1)
+        console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3") ; sleep(1)
 
-            console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3")
-            console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3")
+        #---ESCOLHE A CARTA DA MESA---
+        mesa = Mesa(descarte)
+        mesa.carta = mesa.escolhe_carta_mesa() #escolhe a carta da mesa
 
-            console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
-            baralho_colorido(mesa.carta) #colocar carta colorida
+        console.print("\n[bold u]CARTA DA MESA:[/bold u]", end=' ')
+        baralho_colorido(mesa.carta) ; sleep(1)
 
-            mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
+        #---EXCLUI A CARTA DA MESA DO DESCARTE---
+        i = 0 #inicializador pra teste
+        while i == 0: #enquanto o inicializador for0
+            if mesa.descarte[i] == mesa.carta: #se a carta atual for a mesma da mesa
+                del(mesa.descarte[i]) #carta atual é excluída
+                i = 1 #inicializador passa a ser 1
 
-            if len(bot.cartas) == 1: #caso tenha uma carta
-                console.print("[bold orange1 u]\nBOT DISSE UNO!![/bold orange1 u]")
+        #print("DESCARTE:", mesa.descarte)
 
-            tipo_carta = mesa.carta.split()
+        #---PRIMEIRA RODADA---
+        quem_joga = random.randint(0, 1)
 
-            quem_joga = 1 #próximo a jogar é o jogador
+        #---CONTINUAÇÃO DO JOGO---
+        while (len(jog.cartas) > 0 and len(bot.cartas) > 0): #enquanto nenhum dos dois bater
+            if quem_joga == 0: #se quem jogou antes foi o jogador
+                #---VEZ DO BOT---
+                mesa.carta = bot.vez(mesa.carta, mesa.descarte)
 
+                #print("\nBARALHO ATUALIZADO DO BOT:", bot.cartas)
+
+                console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3") ; sleep(1)
+                console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3") ; sleep(1)
+
+                console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
+                baralho_colorido(mesa.carta) ; sleep(1) #colocar carta colorida
+
+                mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
+
+                if len(bot.cartas) == 1: #caso tenha uma carta
+                    console.print("[bold orange1 u]\nBOT DISSE UNO!![/bold orange1 u]") ; sleep(1)
+
+                tipo_carta = mesa.carta.split()
+
+                quem_joga = 1 #próximo a jogar é o jogador
+
+            else:
+                #---VEZ DO JOGADOR---
+                mesa.carta = jog.vez(mesa.carta, mesa.descarte) #carta da mesa vira a que foi escolhida pelo jog
+
+                console.print("[bold]\nSEU BARALHO ATUALIZADO:[/bold]", end=' ')
+                baralho_colorido(jog.cartas) #colocar carta colorida
+
+                console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3") ; sleep(1)
+                console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3") ; sleep(1)
+
+                console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
+                baralho_colorido(mesa.carta) ; sleep(1) #colocar carta colorida
+
+                mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
+
+                if len(jog.cartas) == 1: #caso tenha uma carta
+                    console.print("[bold orange1 u]\nVOCÊ DISSE UNO!![/bold orange1 u]") ; sleep(1)
+
+                tipo_carta = mesa.carta.split()
+
+                quem_joga = 0 #próximo a jogar é o bot
+
+        if len(jog.cartas) == 0:
+            vencedor = "VOCÊ"
+            v_jog += 1
         else:
-            #---VEZ DO JOGADOR---
-            mesa.carta = jog.vez(mesa.carta, mesa.descarte) #carta da mesa vira a que foi escolhida pelo jog
+            vencedor = "BOT"
+            v_bot += 1
 
-            console.print("[bold]\nSEU BARALHO ATUALIZADO:[/bold]", end=' ')
-            baralho_colorido(jog.cartas) #colocar carta colorida
+        console.print("\n====================================================\n\n[u bold red]>>>> {} VENCEU, PARABÉNS!! <<<<[/u bold red]" .format(vencedor))
+        console.print("[u bold violet]\n-----> FIM DO JOGO!! :) <-----[/u bold violet]")
 
-            console.print("\nBOT TEM[bold] {} [/bold]CARTAS" .format(len(bot.cartas)), style="bold pink3")
-            console.print("VOCÊ TEM[bold] {} [/bold]CARTAS" .format(len(jog.cartas)), style="bold pink3")
-
-            console.print("[bold u]\nNOVA CARTA DA MESA:[/bold u]", end=' ')
-            baralho_colorido(mesa.carta) #colocar carta colorida
-
-            mesa.descarte.append(mesa.carta) #a carta da mesa já entra no final do descarte pra não acabar as cartas do descarte
-
-            if len(jog.cartas) == 1: #caso tenha uma carta
-                console.print("[bold orange1 u]\nVOCÊ DISSE UNO!![/bold orange1 u]")
-
-            tipo_carta = mesa.carta.split()
-
-            quem_joga = 0 #próximo a jogar é o bot
-
-    if len(jog.cartas) == 0:
-        vencedor = "VOCÊ"
-        v_jog += 1
-    else:
-        vencedor = "BOT"
-        v_bot += 1
-
-    console.print("\n====================================================\n\n[u bold red]>>>> {} VENCEU, PARABÉNS!! <<<<[/u bold red]" .format(vencedor))
-    console.print("[u bold violet]\n-----> FIM DO JOGO!! :) <-----[/u bold violet]")
-
-    console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não':", end=' ', style="bold pink3")
-    reiniciar = input("")
+        console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não':", end=' ', style="bold pink3")
+        reiniciar = input("")
+except:
+    console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")
