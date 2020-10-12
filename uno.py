@@ -26,7 +26,8 @@ BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho",
 
 "escolhe cor", "escolhe cor", "escolhe cor", "escolhe cor", "+4 coringa", "+4 coringa", "+4 coringa", "+4 coringa"]
 
-#init(autoreset=True) #todas as mudanças de cor vão ser resetadas quando acabar a linha
+#CONDIÇÕES (PRA FACILITAR O IF):
+#--------------------------------
 
 #CLASSES
 #-----------
@@ -63,7 +64,7 @@ class Jogador(): #pai de bot
         baralho_colorido(self.cartas) #colocar carta colorida
         print("\nSE QUISER COMPRAR UMA CARTA, DIGITE 'comprar':")
 
-        while e.isnumeric() == False and e != "comprar": #se algo inválido for digitado
+        while e.isnumeric() == False and e != "comprar" or int(e) > len(self.cartas)-1: #se algo inválido for digitado
             e = input("SUA ESCOLHA: ") #jogador escolhe o índice da carta ou escolhe comprar
 
         print("\n====================================================")
@@ -124,7 +125,15 @@ class Jogador(): #pai de bot
         #print(carta)
         carta_mesa = carta_mesa.split() #separa a carta da mesa em duas (numero / cor)
 
-        if carta[0] == carta_mesa[0] or carta[1] == carta_mesa[1] or carta_mesa[0] == "+4" or carta[0] == "+4" or carta[0] == "escolhe": #se os números ou as cores forem iguais ou for carta especial
+        CONDICOES_JOG = [
+            carta[0] == carta_mesa[0], #se números forem iguais
+            carta[1] == carta_mesa[1], #se cores forem iguais
+            carta_mesa[0] == "+4", #se a carta da mesa for um +4
+            carta[0] == "+4", #se carta jogada for um +4
+            carta[0] == "escolhe" #se a carta jogada for coringa de cor
+        ] 
+
+        if any(CONDICOES_JOG): #se pelo menos uma das condições de jogador forem true
             return True
         else:
             return False
@@ -137,7 +146,15 @@ class Jogador(): #pai de bot
         carta_comprada_s = carta_comprada.split() #separa em numero/cor
         carta_mesa_s = carta_mesa.split() #separa em numero/cor
 
-        if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1] or carta_comprada_s[1] == "cor" or carta_comprada == "+4" or carta_mesa == "+4": #se for jogável
+        CONDICOES_COMPRA_JOG = [
+            carta_comprada_s[0] == carta_mesa_s[0], #se números forem iguais
+            carta_comprada_s[1] == carta_mesa_s[1], #se cores forem iguais
+            carta_comprada_s[1] == "cor", #se a carta comprada é coringa de cor
+            carta_comprada == "+4", #se a carta comprada é um +4
+            carta_mesa == "+4" #se a carta da mesa é um +4
+        ]
+
+        if any(CONDICOES_COMPRA_JOG): #se for jogável (se qualquer uma das condições de compra for true)
             console.print("[bold]CARTA COMPRADA FOI JOGADA[/bold]")
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
 
@@ -353,7 +370,16 @@ class Bot(Jogador):
         carta_comprada_s = carta_comprada.split() #separa em numero/cor
         carta_mesa_s = str(carta_mesa).split() #separa em numero/cor
 
-        if carta_comprada_s[0] == carta_mesa_s[0] or carta_comprada_s[1] == carta_mesa_s[1] or carta_comprada_s[1] == "cor" or carta_comprada[0] == "+4": #se for jogável
+        CONDICOES_COMPRA_BOT = [
+            carta_comprada_s[0] == carta_mesa_s[0], #se os numeros forem iguais
+            carta_comprada_s[1] == carta_mesa_s[1], #se as cores forem iguais
+            carta_comprada_s[1] == "cor", #se a carta comprada for coringa de cor
+            carta_comprada_s[0] == "+4", #se a carta comprada é um +4
+            carta_mesa_s[0] == "+4", #se a carta da mesa é um +4
+
+        ]
+
+        if any(CONDICOES_COMPRA_BOT): #se pelo menos uma das condições de compra forem true (se for jogável)
             console.print("BOT JOGOU A CARTA COMPRADA", end=' ', style="bold")
             baralho_colorido(carta_comprada)
             mesa.excluir_carta_descarte(carta_comprada) #executar função pra tirar carta comprada do descarte
