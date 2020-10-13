@@ -25,60 +25,6 @@ BARALHO = ["1 vermelho", "2 vermelho", "3 vermelho", "4 vermelho", "5 vermelho",
 
 BARALHO.extend(BARALHO) #pra dobrar o baralho sem digitar muito
 
-
-'''#FUNÇÕES
-#-----------
-def baralho_colorido(cartas):
-    if type(cartas) == type([1, 2]): #se for uma lista
-        for i in range(len(cartas)):
-            carta_atual = cartas[i].split()
-
-            if carta_atual[1] == "vermelho": #se for vermelho
-                console.print("[bold red]" + cartas[i] + "[/bold red]", end ='\n' if i==len(cartas)-1 else ' - ') #carta aparece vermelha + separador se não for a última carta (mesma lógica nos outros)
-
-            elif carta_atual[1] == "amarelo":
-                console.print("[bold yellow]" + cartas[i] + "[/bold yellow]", end ='\n' if i==len(cartas)-1 else ' - ')
-
-            elif carta_atual[1] == "azul":
-                console.print("[bold blue]" + cartas[i] + "[/bold blue]", end ='\n' if i==len(cartas)-1 else ' - ')
-
-            elif carta_atual[1] == "verde":
-                console.print("[bold green]" + cartas[i] + "[/bold green]", end ='\n' if i==len(cartas)-1 else ' - ')
-
-            elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
-                console.print("[bold medium_purple2]" + cartas[i] + "[/bold medium_purple2]", end ='' if i==len(cartas)-1 else ' - ')
-
-    else: #se não for lista (ou seja, se for uma carta só)
-        carta_atual = cartas.split()
-
-        if carta_atual[1] == "vermelho": #se for vermelha
-            console.print("[bold red]" + cartas + "[/bold red]") #vai aparecer vermelha (mesma lógica nos outros)
-
-        elif carta_atual[1] == "amarelo":
-            console.print("[bold yellow]" + cartas + "[/bold yellow]")
-
-        elif carta_atual[1] == "azul":
-            console.print("[bold blue]" + cartas + "[/bold blue]")
-
-        elif carta_atual[1] == "verde":
-            console.print("[bold green]" + cartas + "[/bold green]")
-
-        elif carta_atual[1] == "cor" or carta_atual[1] == "coringa":
-            console.print("[bold medium_purple2]" + cartas + "[/bold medium_purple2]")
-
-def compra_por_carta(n, jogad):
-    if jogad == "jog":
-        for i in range(n):
-            var.bot.cartas.append(var.mesa.descarte[i])
-            var.mesa.descarte.pop(i)
-        console.print("\nBOT TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u") ; sleep(1)
-
-    elif jogad == "bot":
-        for i in range(n):
-            var.jog.cartas.append(var.mesa.descarte[i])
-            var.mesa.descarte.pop(i)
-        console.print("\nVOCÊ TEVE QUE COMPRAR", n, "CARTA(S)", style="bold orange1 u") ; sleep(1)
-'''
 #MAIN
 #-----------
 #try:
@@ -203,7 +149,10 @@ while reiniciar == "sim":
     console.print("\n====================================================\n\n[u bold red]>>>> {} VENCEU, PARABÉNS!! <<<<[/u bold red]" .format(vencedor))
     console.print("[u bold violet]\n-----> FIM DO JOGO!! :) <-----[/u bold violet]")
 
-    console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não':", end=' ', style="bold pink3")
+    console.print("\n\n> DESEJA JOGAR DE NOVO? DIGITE 'sim' OU 'não' (Caso reinicie, a tela vai ser apagada):", end=' ', style="bold pink3")
     reiniciar = input("")
+
+    if reiniciar == "sim":
+        print("\033c") #limpa a tela
 #except:
     #console.print("\n>>> Algum erro ocorreu. Reinicie e vê se vai da próxima :)", style="bold red")

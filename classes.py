@@ -307,7 +307,7 @@ class Bot(Jogador):
             return "comprar"
 
     def vez(self, carta_mesa, descarte):
-        self.contador += 1
+        self.contador = 0
         console.print("\n====================================================\n\n[bold light_pink3]-->>> VEZ DO BOT <<<--[/bold light_pink3]\n")
         #print(self.cartas)
         
