@@ -10,7 +10,7 @@
 
 ### > Antes de tudo:
 
-- #### Para rodar o projeto você precisa ter a biblioteca `rich` instalada por causa da formatação;
+- #### Para rodar o projeto sem ser no executável você precisa ter a biblioteca `rich` instalada por causa da formatação;
 
 - #### Para ver as cores e formatação exata do terminal, use o novo Windows Terminal (o clássico só tem 8 cores e vai bugar a formatação toda);
 
