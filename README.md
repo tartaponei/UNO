@@ -39,13 +39,13 @@
 
 
 
-#### -> Exemplo da tela inicial (uma tela como essa aparece depois de digitar o número de cartas pra cada jogador, eu digitei '7' aqui como dá pra ver).
+### -> Exemplo da tela inicial (uma tela como essa aparece depois de digitar o número de cartas pra cada jogador, eu digitei '7' aqui como dá pra ver).
 
 <img src="./img/2.png" alt="Tela Inicial"  />
 
 
 
-#### -> Exemplo de tela depois que a carta é jogada (digitei '2 azul')
+### -> Exemplo de tela depois que a carta é jogada (digitei '2 azul')
 
 <img src="./img/3.png"  />
 
@@ -112,3 +112,5 @@
 - ### Agradecimentos:
 
   - Carolina, Claudia e Carina, e Jonathan pelo apoio moral, sugestões e ajuda.
+  
+------
