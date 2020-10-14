@@ -201,20 +201,20 @@ class Jogador(): #pai de bot
             return carta_mesa #retorna a carta da mesa (carta da mesa não muda)
 
     def escolher_cor(self, carta_mesa):
-        console.print("\nVOCÊ JOGOU UMA CARTA CORINGA DE ESCOLHER COR\n\nDIGITE O NÚMERO CORRESPONDENTE À COR:[red]\n1- VERMELHO[/red]\n[yellow]2- AMARELO[/yellow]\n[blue]3- AZUL[/blue]\n[green]4- VERDE[/green]")
+        console.print("\nVOCÊ JOGOU UMA CARTA CORINGA DE ESCOLHER COR\n\nDIGITE O NÚMERO CORRESPONDENTE À COR:[bold red]\n1- VERMELHO[/bold red]\n[bold yellow]2- AMARELO[/bold yellow]\n[bold blue]3- AZUL[/bold blue]\n[bold green]4- VERDE[/bold green]")
         escolha = int(input("DIGITE: "))
 
         if escolha == 1:
-            console.print("\nVOCÊ ESCOLHEU [red]VERMELHO[/red]")
+            console.print("\nVOCÊ ESCOLHEU [bold red]VERMELHO[/bold red]")
             return "coringa vermelho"
         elif escolha == 2:
-            console.print("\nVOCÊ ESCOLHEU [yellow]AMARELO[/yellow]")
+            console.print("\nVOCÊ ESCOLHEU [bold yellow]AMARELO[/bold yellow]")
             return "coringa amarelo"
         elif escolha == 3:
-            console.print("\nVOCÊ ESCOLHEU [blue]AZUL[/blue]")
+            console.print("\nVOCÊ ESCOLHEU [bold blue]AZUL[/bold blue]")
             return "coringa azul"
         elif escolha == 4:
-            console.print("\nVOCÊ ESCOLHEU [green]VERDE[/green]")
+            console.print("\nVOCÊ ESCOLHEU [bold green]VERDE[/bold green]")
             return "coringa verde"
 
 class Bot(Jogador):
@@ -328,14 +328,13 @@ class Bot(Jogador):
             return "comprar"
 
     def vez(self, carta_mesa, descarte):
-        self.contador = 0
         console.print("\n====================================================\n\n[bold light_pink3]-->>> VEZ DO BOT <<<--[/bold light_pink3]\n")
         #print(self.cartas)
         
         carta_escolhida = self.carta_possivel(carta_mesa, var.jog.cartas, var.mesa.descarte) #executa a função pra ver se a carta é certa
 
         if carta_escolhida == "comprar":
-            carta_escolhida = self.comprar_carta(descarte, carta_mesa)
+            return self.comprar_carta(descarte, carta_mesa)
         else:
             console.print("O BOT ESCOLHEU", end=' ', style="bold")
             baralho_colorido(carta_escolhida) ; sleep(2) #colocar carta colorida
@@ -396,7 +395,7 @@ class Bot(Jogador):
                 carta_comprada = self.escolher_cor(carta_mesa) #executar função de escolher cor
 
             elif carta_comprada_s[0] == "bloquear" or carta_comprada_s[0] == "retornar":
-                if self.contador < 2 and len(self.cartas) > 0:
+                if self.contador < 3 and len(self.cartas) > 0:
                     carta = self.vez(carta_comprada, descarte)
                     carta_comprada = carta
                     self.contador -= 1
@@ -404,7 +403,7 @@ class Bot(Jogador):
             elif carta_comprada_s[0] == "+2":
                 compra_por_carta(2, "bot")
 
-                if self.contador < 2 and len(self.cartas) > 0:
+                if self.contador < 3 and len(self.cartas) > 0:
                     carta = self.vez(carta_comprada, descarte)
                     carta_comprada = carta
                     self.contador -= 1
