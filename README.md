@@ -14,7 +14,7 @@
 
 - #### Para ver as cores e formatação exata do terminal, use o novo Windows Terminal (o clássico só tem 8 cores e vai bugar a formatação toda);
 
-- #### O arquivo .exe está na pasta `uno_exe`, baixe a pasta inteira e rode `uno.exe` no novo Windows Terminal (navegue até a pasta e depois digite 'uno');
+- #### O arquivo .exe está no rar `uno_exe`, extraia todos os arquivos e rode `uno.exe` no novo Windows Terminal (navegue até a pasta e depois digite 'uno');
 
   ![](./img/diretorio.png)
 
