@@ -22,6 +22,8 @@
 
 - #### Feito em Python 3.8.
 
+  - Quaisquer erros por favor me notifiquem.
+  
   
 
 ------
